@@ -1,5 +1,6 @@
 """
-Sinkron - Python Library for Sinkron Email API
+Sinkron - Python Library for Permanent Email for AI Agents
+Give your agent permanent email addresses through Clawhub.
 """
 
 from .client import SinkronClient

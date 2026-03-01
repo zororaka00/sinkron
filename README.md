@@ -1,6 +1,6 @@
 # Sinkron Python Library
 
-Python library and CLI for Sinkron API - Email service for AI Agents.
+Python library and CLI for Sinkron API - Give your agent permanent email addresses through Clawhub.
 
 ## Features
 

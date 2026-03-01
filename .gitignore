@@ -55,3 +55,4 @@ bandit-report/
 .sinkron.json
 *.log
 sinkron/__pycache__
+*.sarif
