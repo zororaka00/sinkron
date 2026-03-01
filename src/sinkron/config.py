@@ -2,10 +2,10 @@
 Configuration management for Sinkron API
 """
 
+import json
 import os
 from pathlib import Path
 from typing import Optional
-import json
 
 
 class Config:

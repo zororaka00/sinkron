@@ -2,8 +2,9 @@
 Command Line Interface for Sinkron API
 """
 
-import sys
 import argparse
+import sys
+
 from .client import SinkronClient
 from .exceptions import SinkronError
 

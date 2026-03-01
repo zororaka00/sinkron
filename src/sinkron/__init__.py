@@ -6,22 +6,22 @@ Give your agent permanent email addresses through Clawhub.
 from .client import SinkronClient
 from .config import Config
 from .exceptions import (
-    SinkronError,
+    SinkronAPIError,
     SinkronAuthError,
+    SinkronConnectionError,
+    SinkronError,
     SinkronNotFoundError,
     SinkronRateLimitError,
     SinkronValidationError,
-    SinkronAPIError,
-    SinkronConnectionError,
 )
 from .models import (
     AgentInfo,
     Attachment,
-    Message,
-    InboxResponse,
-    RegisterResponse,
-    DeleteMessagesResponse,
     DeleteInboxResponse,
+    DeleteMessagesResponse,
+    InboxResponse,
+    Message,
+    RegisterResponse,
 )
 
 __version__ = "1.0.0"

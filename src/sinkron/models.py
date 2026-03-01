@@ -161,7 +161,10 @@ class InboxResponse:
         """Format inbox for display"""
         lines = [
             f"Inbox: {self.address}",
-            f"Page {self.pagination.page} of {self.pagination.total_pages} (Total: {self.pagination.total_items} messages)",
+            (
+                f"Page {self.pagination.page} of {self.pagination.total_pages}"
+                f" (Total: {self.pagination.total_items} messages)"
+            ),
             "=" * 60,
         ]
         for msg in self.messages:

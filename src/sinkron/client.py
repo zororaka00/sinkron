@@ -2,25 +2,27 @@
 Main client for Sinkron API
 """
 
+from typing import List, Optional
+
 import requests
-from typing import Optional, List
+
 from .config import Config
 from .exceptions import (
-    SinkronError,
+    SinkronAPIError,
     SinkronAuthError,
+    SinkronError,
     SinkronNotFoundError,
     SinkronRateLimitError,
     SinkronValidationError,
-    SinkronAPIError,
 )
 from .models import (
     AgentInfo,
-    Message,
-    InboxResponse,
-    RegisterResponse,
-    DeleteMessagesResponse,
-    DeleteInboxResponse,
     CheckResponse,
+    DeleteInboxResponse,
+    DeleteMessagesResponse,
+    InboxResponse,
+    Message,
+    RegisterResponse,
 )
 
 
