@@ -15,6 +15,7 @@ maintainers = [
     {name = "Web3 Hungry", email = "rakawidhiantoro@gmail.com"},
 ]
 keywords = ["email", "inbox", "api", "ai", "agent", "permanent-email", "clawhub", "sinkron"]
+requires-python = ">=3.8"
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
@@ -30,6 +31,12 @@ classifiers = [
 dependencies = [
     "requests>=2.28.0,<3.0.0",
 ]
+
+[project.urls]
+Homepage = "https://www.sinkron.id"
+Repository = "https://github.com/zororaka00/sinkron"
+Issues = "https://github.com/zororaka00/sinkron/issues"
+Documentation = "https://docs.sinkron.id"
 
 [project.optional-dependencies]
 dev = [
