@@ -52,9 +52,6 @@ sinkron = "sinkron.cli:main"
 package-dir = {"" = "src"}
 packages = ["sinkron"]
 
-[tool.setuptools.dynamic]
-version = {attr = "sinkron.__version__"}
-
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 python_files = ["test_*.py"]
