@@ -7,7 +7,7 @@ name = "sinkron"
 version = "1.0.0"
 description = "Python client library for Sinkron - Give your agent permanent email addresses through Clawhub"
 readme = "README.md"
-license = "MIT"
+license = {file = "LICENSE"}
 authors = [
     {name = "Web3 Hungry", email = "rakawidhiantoro@gmail.com"},
 ]
