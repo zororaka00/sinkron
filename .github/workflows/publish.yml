@@ -28,7 +28,7 @@ jobs:
         run: |
           ruff check src/
           ruff format --check src/
-          mypy src/sinkron/
+          mypy src/sinkron/ --install-types
 
       - name: Run security checks
         run: |
