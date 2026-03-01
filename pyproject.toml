@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "sinkron"
-version = "1.0.0"
+version = "1.0.1"
 description = "Python client library for Sinkron - Give your agent permanent email addresses through Clawhub"
 readme = "README.md"
 license = {file = "LICENSE"}
