@@ -9,22 +9,18 @@ from datetime import datetime
 @dataclass
 class Attachment:
     """Attachment model"""
-    id: int
-    message_id: int
     filename: str
     mime_type: str
     size: int
-    url: str
+    download_url: Optional[str] = None
     
     @classmethod
     def from_dict(cls, data: dict):
         return cls(
-            id=data.get("id", 0),
-            message_id=data.get("message_id", 0),
             filename=data.get("filename", ""),
             mime_type=data.get("mime_type", ""),
             size=data.get("size", 0),
-            url=data.get("url", "")
+            download_url=data.get("download_url")
         )
 
 
@@ -32,7 +28,7 @@ class Attachment:
 class Message:
     """Message model"""
     id: int
-    inbox_id: int
+    agent_id: int
     from_address: str
     subject: str
     body: str
@@ -46,7 +42,7 @@ class Message:
             attachments = [Attachment.from_dict(a) for a in data["attachments"]]
         return cls(
             id=data.get("id", 0),
-            inbox_id=data.get("inbox_id", 0),
+            agent_id=data.get("agent_id", 0),
             from_address=data.get("from_address", ""),
             subject=data.get("subject", ""),
             body=data.get("body", ""),
@@ -120,29 +116,50 @@ class RegisterResponse:
 
 
 @dataclass
+class Pagination:
+    """Pagination info"""
+    page: int
+    limit: int
+    total_items: int
+    total_pages: int
+    
+    @classmethod
+    def from_dict(cls, data: dict):
+        return cls(
+            page=data.get("page", 1),
+            limit=data.get("limit", 25),
+            total_items=data.get("total_items", 0),
+            total_pages=data.get("total_pages", 1)
+        )
+
+
+@dataclass
 class InboxResponse:
     """Inbox response model"""
+    address: str
+    pagination: Pagination
     messages: List[Message]
-    total: int
-    page: int
-    total_pages: int
     
     @classmethod
     def from_dict(cls, data: dict):
         messages = []
         if data.get("messages"):
             messages = [Message.from_dict(m) for m in data["messages"]]
+        
+        pagination_data = data.get("pagination", {})
+        pagination = Pagination.from_dict(pagination_data)
+        
         return cls(
-            messages=messages,
-            total=data.get("total", 0),
-            page=data.get("page", 1),
-            total_pages=data.get("totalPages", 1)
+            address=data.get("address", ""),
+            pagination=pagination,
+            messages=messages
         )
     
     def format_display(self) -> str:
         """Format inbox for display"""
         lines = [
-            f"Page {self.page} of {self.total_pages} (Total: {self.total} messages)",
+            f"Inbox: {self.address}",
+            f"Page {self.pagination.page} of {self.pagination.total_pages} (Total: {self.pagination.total_items} messages)",
             "=" * 60,
         ]
         for msg in self.messages:

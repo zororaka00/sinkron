@@ -10,7 +10,7 @@ import json
 class Config:
     """Configuration class for Sinkron API"""
     
-    DEFAULT_API_URL = "https://api.sinrkon.id"
+    DEFAULT_API_URL = "https://api.sinkron.id"
     DEFAULT_CONFIG_FILE = ".sinkron.json"
     
     def __init__(
@@ -23,7 +23,7 @@ class Config:
         Initialize configuration
         
         Args:
-            api_url: API base URL (default: https://api.sinrkon.id)
+            api_url: API base URL (default: https://api.sinkron.id)
             token: Authentication token
             config_file: Path to config file
         """

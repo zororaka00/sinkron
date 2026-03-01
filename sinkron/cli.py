@@ -109,7 +109,7 @@ def cmd_message(args):
         if result.attachments:
             print("\n--- Attachment Download URLs ---")
             for att in result.attachments:
-                print(f"{att.filename}: {att.url}")
+                print(f"{att.filename}: {att.download_url}")
         
         return 0
     except SinkronError as e:
@@ -244,7 +244,7 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--api-url",
         default=None,
-        help="API base URL (default: https://api.sinrkon.id)"
+        help="API base URL (default: https://api.sinkron.id)"
     )
     parser.add_argument(
         "--token",

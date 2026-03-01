@@ -10,6 +10,7 @@ from .exceptions import (
     SinkronNotFoundError,
     SinkronRateLimitError,
     SinkronValidationError,
+    SinkronAPIError,
 )
 from .models import (
     AgentInfo,
@@ -60,30 +61,45 @@ class SinkronClient:
             headers["Authorization"] = f"Bearer {self.config.token}"
         return headers
     
+    def _make_request(self, method: str, url: str, **kwargs):
+        """Make HTTP request with error handling"""
+        try:
+            response = self._session.request(method, url, **kwargs)
+        except requests.exceptions.ConnectionError:
+            raise SinkronError(
+                f"Cannot connect to API at {self.config.api_url}. "
+                f"Make sure the server is running or check the API URL. "
+                f"Use '--api-url http://localhost:8787' for local development."
+            )
+        except requests.exceptions.Timeout:
+            raise SinkronError("Connection timed out. Please try again.")
+        return self._handle_response(response)
+    
     def _handle_response(self, response: requests.Response):
         """Handle API response and raise appropriate exceptions"""
         status = response.status_code
         
+        # Try to parse error response
+        try:
+            error_data = response.json()
+            error = error_data.get("error", "Unknown error")
+        except:
+            error = response.text or "Unknown error"
+        
         if status == 200:
             return response.json()
         elif status == 400:
-            error = response.json().get("error", "Bad request")
             raise SinkronValidationError(error, status)
         elif status == 401:
-            error = response.json().get("error", "Unauthorized")
             raise SinkronAuthError(error, status)
         elif status == 403:
-            error = response.json().get("error", "Forbidden")
             raise SinkronAuthError(error, status)
         elif status == 404:
-            error = response.json().get("error", "Not found")
             raise SinkronNotFoundError(error, status)
         elif status == 429:
-            error = response.json().get("error", "Rate limit exceeded")
             raise SinkronRateLimitError(error, status)
         else:
-            error = response.json().get("error", "API error")
-            raise SinkronError(error, status)
+            raise SinkronAPIError(error, status)
     
     # ==================== Health ====================
     
@@ -95,8 +111,7 @@ class SinkronClient:
             dict: Health check response
         """
         url = f"{self.config.api_url}/"
-        response = self._session.get(url, headers=self._get_headers())
-        return self._handle_response(response)
+        return self._make_request("GET", url)
     
     # ==================== Agent ====================
     
@@ -121,8 +136,7 @@ class SinkronClient:
         
         url = f"{self.config.api_url}/register"
         payload = {"username": username, "name": name}
-        response = self._session.post(url, json=payload, headers=self._get_headers())
-        data = self._handle_response(response)
+        data = self._make_request("POST", url, json=payload)
         
         # Auto-save token
         self.config.token = data.get("token")
@@ -134,7 +148,7 @@ class SinkronClient:
         Get agent information by username
         
         Args:
-            username: Username to查询
+            username: Username to query
             
         Returns:
             AgentInfo: Agent information
@@ -143,8 +157,7 @@ class SinkronClient:
             raise SinkronAuthError("Token required. Use 'sinkron config --token' or login first.")
         
         url = f"{self.config.api_url}/agent/{username}"
-        response = self._session.get(url, headers=self._get_headers())
-        data = self._handle_response(response)
+        data = self._make_request("GET", url)
         
         return AgentInfo.from_dict(data)
     
@@ -169,8 +182,7 @@ class SinkronClient:
         if search:
             params["search"] = search
         
-        response = self._session.get(url, params=params, headers=self._get_headers())
-        data = self._handle_response(response)
+        data = self._make_request("GET", url, params=params)
         
         return InboxResponse.from_dict(data)
     
@@ -185,8 +197,7 @@ class SinkronClient:
             raise SinkronAuthError("Token required. Use 'sinkron config --token' or login first.")
         
         url = f"{self.config.api_url}/inbox/delete"
-        response = self._session.delete(url, headers=self._get_headers())
-        data = self._handle_response(response)
+        data = self._make_request("POST", url)
         
         return DeleteInboxResponse.from_dict(data)
     
@@ -206,8 +217,7 @@ class SinkronClient:
             raise SinkronAuthError("Token required. Use 'sinkron config --token' or login first.")
         
         url = f"{self.config.api_url}/message/{message_id}"
-        response = self._session.get(url, headers=self._get_headers())
-        data = self._handle_response(response)
+        data = self._make_request("GET", url)
         
         return Message.from_dict(data)
     
@@ -232,8 +242,7 @@ class SinkronClient:
         
         url = f"{self.config.api_url}/messages/delete"
         payload = {"ids": message_ids}
-        response = self._session.post(url, json=payload, headers=self._get_headers())
-        data = self._handle_response(response)
+        data = self._make_request("POST", url, json=payload)
         
         return DeleteMessagesResponse.from_dict(data)
     
@@ -250,7 +259,6 @@ class SinkronClient:
             CheckResponse: Check result
         """
         url = f"{self.config.api_url}/check/{address}"
-        response = self._session.get(url, headers=self._get_headers())
-        data = self._handle_response(response)
+        data = self._make_request("GET", url)
         
         return CheckResponse.from_dict(data)

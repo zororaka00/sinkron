@@ -61,7 +61,7 @@ sinkron agent john
 # Config management
 sinkron config --show
 sinkron config --token YOUR_TOKEN
-sinkron config --api-url https://api.sinrkon.id
+sinkron config --api-url https://api.sinkron.id
 ```
 
 ### Using as Library
@@ -96,7 +96,7 @@ print(f"Exists: {check.exists}")
 
 ### Environment Variables
 
-- `SINKRON_API_URL` - API base URL (default: https://api.sinrkon.id)
+- `SINKRON_API_URL` - API base URL (default: https://api.sinkron.id)
 - `SINKRON_TOKEN` - Authentication token
 
 ### Config File
@@ -105,7 +105,7 @@ The CLI stores configuration in `~/.sinkron.json`:
 
 ```json
 {
-  "api_url": "https://api.sinrkon.id",
+  "api_url": "https://api.sinkron.id",
   "token": "your_token_here"
 }
 ```
@@ -117,6 +117,35 @@ All CLI commands accept these global options:
 - `--api-url URL` - Override API URL
 - `--token TOKEN` - Override authentication token
 - `--version` - Show version
+
+## Local Development
+
+For local development, you can use the Cloudflare Workers local server:
+
+```bash
+# Start local development server
+cd /home/zororaka/Project/sinkron/be
+wrangler dev
+```
+
+Then use the local URL in your commands:
+
+```bash
+# Register using local server
+sinkron register --username john --name "John Doe" --save-token --api-url http://localhost:8787
+
+# Or save the local URL to config
+sinkron config --api-url http://localhost:8787
+sinkron register --username john --name "John Doe" --save-token
+```
+
+### Setting Custom Domain
+
+If you have a custom domain configured:
+
+```bash
+sinkron config --api-url https://your-custom-domain.com
+```
 
 ## API Reference
 

@@ -10,6 +10,8 @@ from .exceptions import (
     SinkronNotFoundError,
     SinkronRateLimitError,
     SinkronValidationError,
+    SinkronAPIError,
+    SinkronConnectionError,
 )
 from .models import (
     AgentInfo,
@@ -30,6 +32,8 @@ __all__ = [
     "SinkronNotFoundError",
     "SinkronRateLimitError",
     "SinkronValidationError",
+    "SinkronAPIError",
+    "SinkronConnectionError",
     "AgentInfo",
     "Attachment",
     "Message",

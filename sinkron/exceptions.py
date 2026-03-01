@@ -35,3 +35,7 @@ class SinkronValidationError(SinkronError):
 class SinkronAPIError(SinkronError):
     """General API error"""
     pass
+
+class SinkronConnectionError(SinkronError):
+    """Connection error - cannot reach API server"""
+    pass
