@@ -226,6 +226,7 @@ def cmd_config(args):
     print("  sinkron config --token TOKEN        Set authentication token")
     print("  sinkron config --api-url URL        Set API URL")
     print("  sinkron config --clear-token        Clear saved token")
+    print("  sinkron health                      Check if platform is active (recommended)")
     return 0
 
 
